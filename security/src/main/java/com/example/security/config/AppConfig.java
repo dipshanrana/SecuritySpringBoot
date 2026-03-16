@@ -21,9 +21,11 @@ public class AppConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration){
         return authenticationConfiguration.getAuthenticationManager();
     }
-
     @Bean
     public ModelMapper modelMapper(){
         return new ModelMapper();
     }
+
+
+
 }

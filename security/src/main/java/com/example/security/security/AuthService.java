@@ -76,12 +76,14 @@ public class AuthService {
             String username = authUtil.determineUsernameFromOAuth2User(oAuth2User,registrationId,providerId);
             user= signUpInternal(new SignUpRequestDto(username,null,name,Set.of(RoleType.PATIENT)),providerType,providerId);
     }
+
         else if(user !=null){
             if(email !=null && !email.isBlank() && !email.equals(user.getUsername())){
                user.setUsername(email);
                userRepository.save(user);
             }
         }
+
         else {
             throw new BadCredentialsException("This email is already registered with provider"+email);
         }

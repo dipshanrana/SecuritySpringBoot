@@ -9,11 +9,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationEntryPointFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -47,8 +49,11 @@ public class SecurityFilter {
                        log.error("OAuth2 error:{}",authException.getMessage());
                       })
                       .successHandler(oAuth2SuccessHandler)
-              );
-
+              )
+              .exceptionHandling(exceptionHandlingConfig->exceptionHandlingConfig.accessDeniedHandler((request, response, accessDeniedException) -> {
+                    
+              }))
+      ;
       return httpSecurity.build();
     }
 

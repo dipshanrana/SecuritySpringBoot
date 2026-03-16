@@ -2,6 +2,7 @@ package com.example.security.entity;
 
 import com.example.security.entity.type.AuthProviderType;
 import com.example.security.entity.type.RoleType;
+import com.example.security.security.RolePermissionMapping;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,6 +42,16 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_"+role.name())).collect(Collectors.toSet());
+//        return roles.stream().map(role -> new SimpleGrantedAuthority("ROLE_"+role.name())).collect(Collectors.toSet());
+
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        roles.forEach(
+                role->{
+                    Set<SimpleGrantedAuthority> permissions = RolePermissionMapping.getAuthoritiesForRole(role);
+                            authorities.addAll(permissions);
+                            authorities.add(new SimpleGrantedAuthority("ROLE_"+role.name()));
+                }
+        );
+       return authorities;
     }
 }
